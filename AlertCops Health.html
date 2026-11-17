@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AlertCops Health</title>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F2F4F7;--sf:#fff;--ink:#14213D;--mut:#55627A;--ln:#BFC8D6;--navy:#0B2545;--nv:#fff;--red:#B3202E;--ok:#1B6B4A;--okb:#E3F1EA;--chip:#E8ECF2;--acc:#0B5CAD;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0C1424;--sf:#131D31;--ink:#E8EDF6;--mut:#9DAAC2;--ln:#2C3B58;--navy:#0A1A33;--red:#D4414E;--ok:#58C79C;--okb:#12372D;--chip:#1C2A45;--acc:#6FA8EE}}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+body{font-family:"Public Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.45}
+body.big{font-size:19px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+#app{height:100%;max-width:480px;margin:0 auto;display:flex;flex-direction:column;position:relative;background:var(--bg)}
+header{background:var(--navy);color:var(--nv);padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:3px solid var(--red)}
+header h1{font-size:1.05rem;font-weight:700;margin:0;line-height:1.15}
+header small{opacity:.8;font-size:.78rem}
+.acct{margin-left:auto;border:1px solid rgba(255,255,255,.6);background:none;color:inherit;border-radius:4px;min-height:44px;padding:0 12px;font-weight:600}
+.acct[aria-pressed="true"]{background:#fff;color:var(--navy)}
+main{flex:1;overflow-y:auto;padding:16px}
+nav{display:grid;grid-template-columns:repeat(4,1fr);background:var(--sf);border-top:1px solid var(--ln)}
+nav button{border:0;background:none;min-height:52px;font-size:.85rem;color:var(--mut)}
+nav button[aria-current="page"]{color:var(--ink);font-weight:700;box-shadow:inset 0 3px 0 var(--navy)}
+h2{font-size:.95rem;font-weight:700;margin:18px 0 8px}
+.panel{background:var(--sf);border:1px solid var(--ln);border-radius:4px;padding:12px 14px;margin-bottom:12px}
+.mut{color:var(--mut);font-size:.88rem}
+.banner{border-left:4px solid var(--acc);background:var(--sf);padding:10px 12px;margin-bottom:12px;font-size:.92rem}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.tile{background:var(--sf);border:1px solid var(--ln);border-radius:4px;min-height:76px;padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center}
+.tile i{font-style:normal;font-size:1.7rem;line-height:1}
+.tile[aria-pressed="true"]{border:2px solid var(--navy);background:var(--chip);font-weight:700}
+.acc .tile{min-height:96px;border-width:2px}
+.sos{width:100%;min-height:84px;margin:14px 0;border:0;border-radius:4px;background:var(--red);color:#fff;font-size:1.25rem;font-weight:700}
+.btn{border:1px solid var(--navy);background:var(--sf);border-radius:4px;min-height:48px;padding:0 14px;font-weight:600}
+.btn.pri{background:var(--navy);color:var(--nv)}
+.btn.blk{width:100%;margin-top:8px}
+.link{background:none;border:0;color:var(--acc);text-decoration:underline;min-height:44px;padding:0}
+.row{display:flex;gap:8px;margin-top:8px}
+.row>*{flex:1}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--ln)}
+.sw:last-child{border:0}
+.sw .d{display:block;font-weight:400}
+.sw input{width:24px;height:24px;flex:none;accent-color:var(--navy)}
+label.f{display:block;font-weight:600;font-size:.88rem;margin:10px 0 4px}
+input[type=text],textarea,select{width:100%;background:var(--bg);border:1px solid var(--ln);border-radius:4px;padding:10px;min-height:46px}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:flex;gap:12px;padding-bottom:12px;position:relative;color:var(--mut)}
+.tl li::before{content:"";position:absolute;left:8px;top:20px;bottom:0;width:2px;background:var(--ln)}
+.tl li:last-child::before{display:none}
+.tl b{width:18px;height:18px;border-radius:50%;border:2px solid var(--ln);background:var(--sf);flex:none;margin-top:2px}
+.tl .done{color:var(--ink)}.tl .done b{background:var(--ok);border-color:var(--ok)}
+.tl .now{color:var(--ink);font-weight:700}.tl .now b{border-color:var(--red)}
+.eta{background:var(--okb);border:1px solid var(--ok);border-radius:4px;padding:10px 12px;margin-bottom:12px;font-weight:700}
+.chat{display:flex;flex-direction:column;gap:8px;max-height:240px;overflow-y:auto}
+.msg{max-width:86%;padding:8px 12px;border-radius:4px;border:1px solid var(--ln)}
+.msg.me{align-self:flex-end;background:var(--navy);color:var(--nv);border-color:var(--navy)}
+.msg.op{align-self:flex-start;background:var(--sf)}
+.msg small{display:block;opacity:.75;font-size:.76rem}
+.pg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.pg .tile{min-height:80px;font-size:.74rem;padding:4px}
+.note{font-size:.78rem;color:var(--mut);text-align:center}
+.ov{position:absolute;inset:0;z-index:10;background:var(--bg);overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:12px}
+.ov.dk{background:#0A1220;color:#fff;align-items:center;justify-content:center;text-align:center}
+.cnt{font-size:4.5rem;font-weight:700;line-height:1}
+.pic{height:170px;border:2px solid var(--navy);border-radius:4px;background:var(--sf);display:grid;place-items:center;font-size:5.5rem}
+.pulse{animation:pl .545s infinite}
+@keyframes pl{50%{transform:scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+.bigt{font-size:1.4rem;font-weight:600;line-height:1.3;margin:4px 0}
+.opmsg{background:var(--sf);border-left:4px solid var(--acc);padding:10px 12px}
+.vid{height:46vh;background:#16263F;border-radius:4px;display:grid;place-items:center;color:#fff;font-size:4rem;position:relative}
+.vid span{position:absolute;bottom:8px;left:10px;right:10px;font-size:.9rem;background:rgba(0,0,0,.6);padding:6px 8px}
+.toast{position:absolute;left:12px;right:12px;bottom:68px;background:var(--navy);color:#fff;padding:10px 12px;border-radius:4px;z-index:20;font-size:.9rem}
+.nfc{background:#fff;color:#111;border:1px solid #999;border-radius:4px;padding:14px;width:100%;text-align:left}
+.nfc h3{margin:0 0 8px;color:#B3202E}
+.nfc p{margin:4px 0}
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div><h1>AlertCops Health</h1><small>Emergencias sanitarias · 112</small></div>
+    <button class="acct" id="hAcc" data-a="acc" aria-pressed="false">Modo accesible</button>
+  </header>
+  <main id="main" tabindex="-1"></main>
+  <nav aria-label="Secciones">
+    <button data-v="home">Emergencia</button><button data-v="track">Seguimiento</button><button data-v="ficha">Mi ficha</button><button data-v="set">Ajustes</button>
+  </nav>
+  <div id="live" class="toast" role="status" hidden></div>
+</div>
+<script>
+const L={es:"Español",en:"English",fr:"Français",ro:"Română"},VL={es:"es-ES",en:"en-GB",fr:"fr-FR",ro:"ro-RO"};
+const TYPES=[["😵","Inconsciente"],["💔","Dolor de pecho"],["🫁","Dificultad para respirar"],["🩸","Hemorragia"],["🤕","Caída o golpe"],["❓","Otra urgencia"]];
+const PICTO=[["🗣️",{es:"No puedo hablar",en:"I cannot speak",fr:"Je ne peux pas parler",ro:"Nu pot vorbi"}],["🦻",{es:"Soy sordo/a",en:"I am deaf",fr:"Je suis sourd(e)",ro:"Sunt surd(ă)"}],["🫁",{es:"No puedo respirar",en:"I cannot breathe",fr:"Je ne peux pas respirer",ro:"Nu pot respira"}],["📍",{es:"Me duele aquí",en:"It hurts here",fr:"J’ai mal ici",ro:"Mă doare aici"}],["👥",{es:"Hay más heridos",en:"There are more injured people",fr:"Il y a d’autres blessés",ro:"Mai sunt și alți răniți"}],["✅",{es:"Sí",en:"Yes",fr:"Oui",ro:"Da"}],["❌",{es:"No",en:"No",fr:"Non",ro:"Nu"}],["🆘",{es:"Necesito ayuda ya",en:"I need help now",fr:"J’ai besoin d’aide",ro:"Am nevoie de ajutor"}]];
+const OP=[{es:"¿Puede decirme qué ha ocurrido?",en:"Can you tell me what happened?",fr:"Pouvez-vous me dire ce qui s’est passé ?",ro:"Puteți spune ce s-a întâmplat?"},{es:"Mantenga la calma. Una ambulancia está en camino.",en:"Stay calm. An ambulance is on its way.",fr:"Restez calme. Une ambulance est en route.",ro:"Păstrați calmul. O ambulanță este pe drum."},{es:"¿La persona respira?",en:"Is the person breathing?",fr:"La personne respire-t-elle ?",ro:"Persoana respiră?"},{es:"Gracias, he recibido su mensaje.",en:"Thank you, I received your message.",fr:"Merci, j’ai bien reçu votre message.",ro:"Mulțumesc, am primit mesajul."}];
+const G={calm:["🧘",{es:"Mantenga la calma y deje el teléfono en altavoz.",en:"Stay calm and keep the phone on speaker.",fr:"Restez calme et gardez le téléphone sur haut-parleur.",ro:"Păstrați calmul și lăsați telefonul pe difuzor."}],door:["🚪",{es:"Abra la puerta y encienda las luces para que el equipo llegue rápido.",en:"Open the door and turn on the lights so the team can arrive quickly.",fr:"Ouvrez la porte et allumez les lumières pour faciliter l’arrivée de l’équipe.",ro:"Deschideți ușa și aprindeți luminile ca echipa să ajungă repede."}],breath:["👂",{es:"Compruebe si respira: mire el pecho durante 10 segundos.",en:"Check for breathing: watch the chest for 10 seconds.",fr:"Vérifiez la respiration : regardez le torse pendant 10 secondes.",ro:"Verificați respirația: priviți pieptul 10 secunde."}],cpr:["🫀",{es:"Si no respira: manos en el centro del pecho y empuje fuerte y rápido, al ritmo del icono.",en:"If not breathing: hands on the centre of the chest, push hard and fast to the rhythm of the icon.",fr:"S’il ne respire pas : mains au centre de la poitrine, poussez fort et vite au rythme de l’icône.",ro:"Dacă nu respiră: mâinile în centrul pieptului, apăsați tare și repede în ritmul pictogramei."}],press:["🩹",{es:"Presione la herida con un paño limpio y no lo suelte.",en:"Press on the wound with a clean cloth and do not let go.",fr:"Appuyez sur la plaie avec un linge propre sans relâcher.",ro:"Apăsați rana cu o cârpă curată fără să o eliberați."}],still:["🛑",{es:"No mueva a la persona ni le dé de comer ni de beber.",en:"Do not move the person or give food or drink.",fr:"Ne bougez pas la personne et ne donnez ni à manger ni à boire.",ro:"Nu mutați persoana și nu dați de mâncare sau de băut."}]};
+const STEPS=["Solicitud enviada","Recibida por el centro coordinador","Valoración médica en curso","Recurso asignado","Ambulancia en camino"];
+const DEST={none:"No enviar",room:"Sala de emergencias",contacts:"Contactos de confianza",both:"Sala de emergencias y contactos"};
+const $=s=>document.querySelector(s),esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const st={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let C=st.get("cfg",{acc:false,voice:false,lang:"es",big:false,lock:true,power:false,hist:true,dest:"room"});
+let F=st.get("ficha",{nombre:"",grupo:"",alergias:"",enf:"",med:"",nec:""});
+let K=st.get("contacts",[{n:"María (pareja)",t:"600 000 000",a:true}]);
+let H=st.get("hist",[]);
+const save=()=>{st.set("cfg",C);st.set("ficha",F);st.set("contacts",K);st.set("hist",H)};
+const S={view:"home",type:null,pos:null,posTxt:"Buscando ubicación…",id:null,step:0,eta:null,msgs:[],notes:[],ov:null,gi:0,mute:false,timers:[]};
+const tr=o=>o[C.lang]||o.es,now=()=>new Date().toTimeString().slice(0,5);
+const mt=m=>m.me?(m.k!=null?tr(PICTO[m.k][1]):m.t):(m.o!=null?tr(OP[m.o]):m.t);
+const vib=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+function speak(t,force){if(!(force||C.voice)||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=VL[C.lang];u.rate=.9;speechSynthesis.speak(u)}
+function toast(t){const e=$("#live");e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,3500);speak(t)}
+function locate(){if(!navigator.geolocation){S.posTxt="Ubicación no disponible";return render()}navigator.geolocation.getCurrentPosition(p=>{S.pos=[p.coords.latitude,p.coords.longitude];S.posTxt="Ubicación precisa detectada";render()},()=>{S.pos=[40.4168,-3.7038];S.posTxt="Ubicación aproximada (demo: Madrid)";render()},{enableHighAccuracy:true,timeout:6000})}
+const center=()=>S.pos&&S.pos[0]>40&&S.pos[0]<41&&S.pos[1]>-4.2&&S.pos[1]<-3.2?"SUMMA 112 · Comunidad de Madrid":"Centro coordinador de urgencias de tu zona";
+const gset=()=>["Hemorragia","Caída o golpe"].includes(S.type)?["calm","door","press","still"]:["calm","door","breath","cpr"];
+const nfcData=()=>[F.nombre&&"Nombre: "+F.nombre,F.grupo&&"Grupo sanguíneo: "+F.grupo,F.alergias&&"Alergias: "+F.alergias,F.enf&&"Enfermedades: "+F.enf,F.med&&"Medicación: "+F.med,F.nec&&"Necesidades: "+F.nec,K.length&&"Contactos: "+K.map(k=>k.n+" "+k.t).join("; ")].filter(Boolean);
+function saveH(){if(!C.hist||!S.id)return;const e={id:S.id,d:new Date().toLocaleString("es-ES"),type:S.type||"Sin especificar",msgs:S.msgs.map(m=>({me:!!m.me,t:mt({...m,k:m.k,o:m.o})}))};const i=H.findIndex(x=>x.id===S.id);i<0?H.unshift(e):H[i]=e;st.set("hist",H)}
+
+function sw(k,l,d){return `<label class="sw"><span><b>${l}</b><span class="mut d">${d}</span></span><input type="checkbox" data-c="${k}" ${C[k]?"checked":""}></label>`}
+function vHome(){const n=K.filter(k=>k.a).length;return `
+<div class="panel"><b>${esc(S.posTxt)}</b><div class="mut">${S.pos?S.pos[0].toFixed(4)+", "+S.pos[1].toFixed(4)+" · ":""}Destino: ${esc(center())}</div></div>
+${C.acc?`<div class="banner">Modo accesible activo: la solicitud llegará al centro como comunicación solo escrita y con pictogramas. No hace falta hablar.</div>`:""}
+<h2>Tipo de urgencia (opcional)</h2>
+<div class="grid">${TYPES.map(([i,t])=>`<button class="tile" data-t="${t}" aria-pressed="${S.type===t}"><i aria-hidden="true">${i}</i>${t}</button>`).join("")}</div>
+<button class="sos" data-a="count">Solicitar asistencia sanitaria</button>
+<div class="panel mut">Se enviará tu ubicación${F.nombre||F.alergias||F.enf||F.med||F.nec?" y tu ficha sanitaria":""}. Aviso automático a ${n} contacto(s) de confianza.</div>
+<button class="link" data-a="lock">Probar acceso desde la pantalla bloqueada</button>
+<p class="note">Prototipo de demostración. En una emergencia real, llama al 112.</p>`}
+
+function vTrack(){if(!S.id)return `<div class="panel" style="text-align:center;padding:28px 14px"><h2 style="margin:0 0 6px">Sin solicitud activa</h2><p class="mut">Cuando pidas ayuda verás aquí el estado y podrás comunicarte con el centro.</p><button class="btn pri" data-v="home">Solicitar asistencia</button></div>`;
+const last=S.msgs.some(m=>!m.me);
+return `<div class="panel"><div class="mut">Solicitud ${S.id} · ${esc(S.type||"Sin especificar")}${C.acc?" · comunicación escrita":""}</div><b>${esc(center())}</b></div>
+${S.eta!=null?`<div class="eta">Llegada estimada de la ambulancia: ${S.eta} min</div>`:""}
+<div class="panel"><ul class="tl">${STEPS.map((t,i)=>`<li class="${i<S.step?"done":i===S.step?"now":""}"><b></b>${t}</li>`).join("")}</ul></div>
+${S.notes.length?`<div class="panel"><b>Avisos enviados</b>${S.notes.map(n=>`<div class="mut">${esc(n)}</div>`).join("")}</div>`:""}
+<div class="row"><button class="btn pri" data-a="guide">Instrucciones guiadas</button><button class="btn" data-a="vid">Videollamada</button></div>
+<h2>Comunicación con el operador</h2>
+<div class="panel"><div class="chat" role="log" aria-live="polite">${S.msgs.map(m=>`<div class="msg ${m.me?"me":"op"}">${m.me?"":"<small>Operador"+(C.lang!=="es"?" · traducción automática":"")+"</small>"}${esc(mt(m))}${!m.me&&C.lang!=="es"&&m.o!=null?`<small>Original: ${esc(OP[m.o].es)}</small>`:""}</div>`).join("")||`<span class="mut">Aún no hay mensajes.</span>`}</div>
+<div class="row"><input type="text" id="cIn" placeholder="Escribe en ${L[C.lang]}" aria-label="Mensaje"><button class="btn pri" data-a="csend" style="flex:none">Enviar</button></div>
+<div class="pg">${PICTO.map(([i,t],k)=>`<button class="tile" data-p="${k}"><i aria-hidden="true">${i}</i>${esc(tr(t))}</button>`).join("")}</div>
+<div class="note" style="margin-top:8px">Los pictogramas se envían al operador en español.</div></div>`}
+
+function vFicha(){const f=(k,l,p)=>`<label class="f" for="f_${k}">${l}</label><input type="text" id="f_${k}" data-f="${k}" value="${esc(F[k])}" placeholder="${p}">`;return `
+<div class="panel"><b>Datos sanitarios voluntarios</b><div class="mut">Solo se envían al centro coordinador cuando pides ayuda. Se guardan automáticamente.</div>
+${f("nombre","Nombre completo","")}${f("grupo","Grupo sanguíneo","Ej.: A+")}${f("alergias","Alergias","Ej.: penicilina")}${f("enf","Enfermedades conocidas","Ej.: diabetes tipo 1")}${f("med","Medicación habitual","Ej.: insulina")}${f("nec","Necesidades especiales","Ej.: sordera, silla de ruedas, idioma")}</div>
+<div class="panel"><b>Pegatina NFC</b><div class="mut">Llévala en el casco o la cartera. Cualquier móvil que la lea mostrará tus datos de emergencia sin desbloquearse.</div>
+<div class="row"><button class="btn pri" data-a="nfcw">Grabar en pegatina</button><button class="btn" data-a="nfcr">Ver lectura</button></div></div>`}
+
+function vSet(){return `
+<h2 style="margin-top:0">Accesibilidad y comunicación</h2><div class="panel">
+${sw("acc","Modo accesible","Para personas sordas, con dificultades del habla o que no pueden hablar: pictogramas, respuestas rápidas y texto.")}
+${sw("voice","Lectura en voz alta","Lee avisos y mensajes del operador. Compatible con TalkBack y VoiceOver.")}
+${sw("big","Texto grande","Aumenta el tamaño de letra.")}
+<label class="f" for="lg">Idioma de traducción automática</label><select id="lg" data-l>${Object.entries(L).map(([k,v])=>`<option value="${k}" ${C.lang===k?"selected":""}>${v}</option>`).join("")}</select></div>
+<h2>Acceso rápido sin desbloquear</h2><div class="panel">
+${sw("lock","Botón en pantalla de bloqueo","Pide ayuda sin introducir PIN ni huella.")}
+${sw("power","Pulsar 5 veces el botón de encendido","Envía la solicitud en silencio.")}
+<button class="btn blk" data-a="lock">Probar pantalla bloqueada</button><div class="note">En el prototipo web es una simulación; requiere la app nativa.</div></div>
+<h2>Contactos de confianza</h2><div class="panel">
+${K.map((k,i)=>`<div class="sw"><span><b>${esc(k.n)}</b><span class="mut d">${esc(k.t)}</span></span><label class="mut"><input type="checkbox" data-k="${i}" ${k.a?"checked":""}> Avisar</label><button class="link" data-del="${i}">Quitar</button></div>`).join("")||`<span class="mut">Sin contactos.</span>`}
+<label class="f" for="kn">Nombre</label><input type="text" id="kn"><label class="f" for="kt">Teléfono</label><input type="text" id="kt" inputmode="tel"><button class="btn blk" data-a="addc">Añadir contacto</button></div>
+<h2>Historial de llamadas y mensajes</h2><div class="panel">
+${sw("hist","Guardar historial","Registra solicitudes, llamadas y mensajes en este dispositivo.")}
+<label class="f" for="ds">Enviar automáticamente a</label><select id="ds" data-d>${Object.entries(DEST).map(([k,v])=>`<option value="${k}" ${C.dest===k?"selected":""}>${v}</option>`).join("")}</select>
+${H.map(h=>`<div class="mut" style="margin-top:8px">${h.id} · ${h.d} · ${esc(h.type)} · ${h.msgs.length} mensajes</div>`).join("")}
+<button class="btn blk" data-a="sendh">Enviar historial ahora</button></div>`}
+
+function ovHtml(){const o=S.ov;
+if(o==="count")return `<div class="ov dk"><div>Enviando solicitud a<br><b>${esc(center())}</b></div><div class="cnt" id="num">${S.n}</div><button class="btn pri blk" data-a="now">Enviar ya</button><button class="btn blk" data-a="close">Cancelar</button></div>`;
+if(o==="lock")return `<div class="ov dk"><div class="cnt">${now()}</div><div>Pantalla bloqueada</div>${C.lock?`<button class="sos" data-a="now" style="max-width:340px">Emergencia sanitaria<br><small>Sin desbloquear</small></button>`:`<p>El acceso desde pantalla bloqueada está desactivado en Ajustes.</p>`}<button class="btn blk" data-a="close" style="max-width:340px">Volver</button></div>`;
+if(o==="call")return `<div class="ov dk"><div>Llamada entrante</div><div class="bigt">Centro coordinador de urgencias</div><button class="sos" data-a="answer" style="max-width:340px;background:var(--ok)">Responder en altavoz</button><button class="btn blk" data-a="close" style="max-width:340px">Seguir por mensajes</button></div>`;
+if(o==="guide"){const set=gset(),g=G[set[S.gi]],lm=[...S.msgs].reverse().find(m=>!m.me);return `<div class="ov" role="dialog" aria-label="Instrucciones guiadas"><div class="mut">Instrucciones guiadas · paso ${S.gi+1} de ${set.length}${S.mute?" · sin audio":" · altavoz activo"}</div><div class="pic ${set[S.gi]==="cpr"?"pulse":""}" aria-hidden="true">${g[0]}</div><p class="bigt">${esc(tr(g[1]))}</p>
+<div class="row"><button class="btn" data-a="gprev">Anterior</button><button class="btn" data-a="gsay">Repetir voz</button><button class="btn pri" data-a="gnext">${S.gi===set.length-1?"Terminar":"Siguiente"}</button></div>
+${lm?`<div class="opmsg"><small class="mut">Operador</small><br>${esc(mt(lm))}</div>`:""}
+<div class="row"><input type="text" id="gIn" placeholder="Pregunta al operador" aria-label="Pregunta"><button class="btn pri" data-a="gsend" style="flex:none">Enviar</button></div>
+<div class="row"><button class="btn" data-a="mic">Hablar con el operador</button><button class="btn" data-a="close">Cerrar</button></div></div>`}
+if(o==="video")return `<div class="ov"><div class="vid">🧑‍⚕️<span>Subtítulos en directo (simulado) · Se puede pedir intérprete de lengua de signos</span></div><button class="btn pri blk" data-a="close">Colgar</button></div>`;
+if(o==="nfc"){const d=nfcData();return `<div class="ov dk"><div class="nfc"><h3>Datos de emergencia (NFC)</h3>${d.map(x=>`<p>${esc(x)}</p>`).join("")||"<p>No hay datos. Rellena tu ficha.</p>"}</div><div class="mut">Esto es lo que vería un sanitario al leer la pegatina.</div><button class="btn blk" data-a="close" style="max-width:340px">Cerrar</button></div>`}
+return ""}
+
+function render(){
+  document.body.classList.toggle("big",C.big);document.body.classList.toggle("acc",C.acc);
+  $("#hAcc").setAttribute("aria-pressed",C.acc);
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===S.view?"page":"false"));
+  $("#main").innerHTML=({home:vHome,track:vTrack,ficha:vFicha,set:vSet})[S.view]();
+  const old=$(".ov");if(old)old.remove();const h=ovHtml();if(h)$("#app").insertAdjacentHTML("beforeend",h);
+  const c=$(".chat");if(c)c.scrollTop=c.scrollHeight}
+
+function send(){clearInterval(S.ci);S.timers.forEach(clearTimeout);S.timers=[];
+  S.id="AH-"+Math.floor(10000+Math.random()*89999);S.step=0;S.eta=null;S.msgs=[];S.gi=0;S.ov=null;S.view="track";S.notes=[];
+  const al=K.filter(k=>k.a);if(al.length)S.notes.push(`Aviso con ubicación enviado a ${al.map(k=>k.n).join(", ")} · ${now()}`);
+  const go=(ms,f)=>S.timers.push(setTimeout(()=>{f();saveH();render()},ms));
+  go(2500,()=>S.step=1);
+  go(6000,()=>{S.step=2;S.msgs.push({o:0});speak(tr(OP[0]));if(C.acc){S.ov="guide";S.mute=!C.voice;vib([300,150,300])}else{S.ov="call";vib([500,250,500,250,500])}});
+  go(14000,()=>{S.step=3;S.eta=12});
+  go(20000,()=>{S.step=4;S.eta=9;if(C.hist&&C.dest!=="none")S.notes.push(`Historial enviado a: ${DEST[C.dest]} · ${now()}`)});
+  vib(200);saveH();render()}
+function say(m){const v=m.t!=null?m.t.trim():1;if(!v)return;S.msgs.push({me:true,...m});render();
+  S.timers.push(setTimeout(()=>{const o=S.msgs.filter(x=>!x.me).length%OP.length||3;S.msgs.push({o});speak(tr(OP[o]));if(C.acc)vib(150);saveH();render()},1600))}
+const gsay=()=>{const g=G[gset()[S.gi]];speak(tr(g[1]),!S.mute)};
+const A={
+ acc(){C.acc=!C.acc;save();render()},
+ count(){S.ov="count";S.n=5;render();clearInterval(S.ci);S.ci=setInterval(()=>{S.n--;if(S.n<=0)return send();const e=$("#num");if(e)e.textContent=S.n},1000)},
+ now:send,close(){clearInterval(S.ci);S.ov=null;speechSynthesis&&speechSynthesis.cancel();render()},
+ lock(){S.ov="lock";render()},answer(){S.ov="guide";S.mute=false;render();gsay()},guide(){S.ov="guide";S.mute=!C.voice;render()},
+ gprev(){S.gi=Math.max(0,S.gi-1);render();gsay()},gnext(){if(S.gi>=gset().length-1)return A.close();S.gi++;render();gsay()},gsay,
+ gsend(){const i=$("#gIn");const v=i.value;i.value="";say({t:v})},mic(){say({t:"(Mensaje de voz) ¿Qué hago ahora?"})},
+ csend(){const i=$("#cIn");const v=i.value;i.value="";say({t:v})},vid(){S.ov="video";render()},
+ addc(){const n=$("#kn").value.trim(),t=$("#kt").value.trim();if(!n)return;K.push({n,t,a:true});save();render()},
+ sendh(){toast(`Historial enviado a: ${DEST[C.dest==="none"?"room":C.dest]}`)},
+ nfcr(){S.ov="nfc";render()},
+ async nfcw(){if(!("NDEFReader" in window))return toast("Este navegador no puede grabar NFC. Funciona en Chrome para Android o en la app. Usa «Ver lectura» para la demo.");try{await new NDEFReader().write({records:[{recordType:"text",data:nfcData().join("\n")}]});toast("Pegatina grabada")}catch(e){toast("No se pudo grabar. Acerca la pegatina al móvil.")}}
+};
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a],[data-v],[data-t],[data-p],[data-del]");if(!b)return;const d=b.dataset;
+ if(d.v){S.view=d.v;S.ov=null;return render()}
+ if(d.t!==undefined){S.type=S.type===d.t?null:d.t;return render()}
+ if(d.p!==undefined)return say({k:+d.p});
+ if(d.del!==undefined){K.splice(+d.del,1);save();return render()}
+ A[d.a]&&A[d.a]()});
+document.addEventListener("change",e=>{const t=e.target,d=t.dataset;
+ if(d.c){C[d.c]=t.checked;save();render()}
+ else if(d.k!==undefined){K[+d.k].a=t.checked;save()}
+ else if(d.l!==undefined){C.lang=t.value;save();render()}
+ else if(d.d!==undefined){C.dest=t.value;save()}});
+document.addEventListener("input",e=>{const k=e.target.dataset.f;if(k){F[k]=e.target.value;save()}});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"){if(e.target.id==="cIn")A.csend();if(e.target.id==="gIn")A.gsend()}});
+locate();render();
+</script>
+</body>
+</html>
